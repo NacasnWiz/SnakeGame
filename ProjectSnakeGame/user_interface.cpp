@@ -1,18 +1,59 @@
 #include "user_interface.h"
 #include <iostream>
+#include <algorithm>
 
 bool isSnakeHeadHere(int horizontalCoord, int verticalCoord, Game& game) {
-	return ((horizontalCoord == game.getSnake().headPos.first) && (verticalCoord == game.getSnake().headPos.second));
+	return ((horizontalCoord == game.getSnake().body[0].first) && (verticalCoord == game.getSnake().body[0].second));
 }
 
 bool isAppleHere(int horizontalCoord, int verticalCoord, Game& game) {
 	return ((horizontalCoord == game.getField().applePos.first) && (verticalCoord == game.getField().applePos.second));
 }
 
+bool isSnakeBodyHere(int horizontalCoord, int verticalCoord, Game& game) {
+	std::pair<int, int> positionToCheck{ std::make_pair(horizontalCoord, verticalCoord) };
+	for (unsigned long iBody{ 1 }; iBody < game.getSnake().body.size(); ++iBody) {
+		if (game.getSnake().body[iBody] == positionToCheck) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void clearScreen(void)
 {
 	system("cls");
 }
+
+void printSnakeHead(Snake snake) {
+	switch (snake.headOrientation) {
+	case Up:
+		std::cout << "^^";
+		return;
+	case Right:
+		std::cout << "o>";
+		return;
+	case Down:
+		std::cout << "vv";
+		return;
+	case Left:
+		std::cout << "<o";
+		return;
+	}
+}
+
+void printSnakeBody() {
+	std::cout << "[]";
+}
+
+void printApple() {
+	std::cout << char(0xFE) << char(0xFE);
+}
+
+void printEmptyTile() {
+	std::cout << char(0x20) << char(0x20);
+}
+
 
 void printGame(Game& game) {
 	std::cout << '+';
@@ -27,15 +68,19 @@ void printGame(Game& game) {
 		{
 			if (isSnakeHeadHere(iLine, iColumn, game))
 			{
-				std::cout << "^^";
+				printSnakeHead(game.getSnake());
+			}
+			else if (isSnakeBodyHere(iLine, iColumn, game))
+			{
+				printSnakeBody();
 			}
 			else if (isAppleHere(iLine, iColumn, game))
 			{
-				std::cout << char(0xFE) << char(0xFE);
+				printApple();
 			}
 			else
 			{
-				std::cout << char(0x20) << char(0x20);
+				printEmptyTile();
 			}
 		}
 		std::cout << '|';

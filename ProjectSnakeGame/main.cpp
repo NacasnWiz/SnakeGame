@@ -33,6 +33,15 @@ void startGame(Game& game) {
 	printGame(game);
 }
 
+bool isGameOver(Game& game) {
+	for (unsigned long iBody{ 1 }; iBody < game.getSnake().length; ++iBody) {
+		if (game.getSnake().body[0] == game.getSnake().body[iBody]) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void playGame(Game& game) {
 	//receive Input
 	Direction nextMove{ receiveDirectionInput() };
@@ -41,16 +50,23 @@ void playGame(Game& game) {
 	}
 
 	//move accordingly
-	game.moveSnake(nextMove);
+	if (game.isMoveValid(nextMove)) {
+		game.moveSnake(nextMove);
+	}
+
+	if (isGameOver(game)) {
+		game.gameOver();
+	}
+
 
 	//snake eats apple?
 	if (game.isAppleEaten()) {
-		game.renewApple();
+		game.snakeEatsApple();
+
 		clearScreen();
 		printGame(game);
 		std::cout << "Gnap!\n";
-		//print the game state
-	}
+	}//print the game state anyways
 	else {
 		clearScreen();
 		printGame(game);
@@ -67,6 +83,8 @@ int main()
 	while (current_game.m_isOn) {
 		playGame(current_game);
 	}
+
+	std::cout << "GameOver!";
 
 
 }
