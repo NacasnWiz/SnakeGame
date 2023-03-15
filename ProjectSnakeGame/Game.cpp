@@ -20,6 +20,9 @@ void Game::moveSnake(Direction direction) {
 		break;
 	}
 
+	nextHeadPos.first = (nextHeadPos.first + m_field.length) % m_field.length;
+	nextHeadPos.second = (nextHeadPos.second + m_field.width) % m_field.width;
+
 	m_snake.body.insert(m_snake.body.begin(), nextHeadPos);
 	m_snake.body.resize(m_snake.length);
 
