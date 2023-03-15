@@ -11,7 +11,7 @@ bool isAppleHere(int horizontalCoord, int verticalCoord, Game& game) {
 }
 
 bool isSnakeBodyHere(int horizontalCoord, int verticalCoord, Game& game) {
-	std::pair<int, int> positionToCheck{ std::make_pair(horizontalCoord, verticalCoord) };
+	Position positionToCheck{ std::make_pair(horizontalCoord, verticalCoord) };
 	for (unsigned long iBody{ 1 }; iBody < game.getSnake().body.size(); ++iBody) {
 		if (game.getSnake().body[iBody] == positionToCheck) {
 			return true;

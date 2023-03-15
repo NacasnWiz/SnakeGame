@@ -1,8 +1,9 @@
 #include "Game.h"
+#include <ctime>
 
 
 void Game::moveSnake(Direction direction) {
-	std::pair<int, int> nextHeadPos{ m_snake.body[0]};
+	Position nextHeadPos{ m_snake.body[0]};
 	
 	m_snake.headOrientation = direction;
 	switch (direction) {
@@ -40,8 +41,28 @@ bool Game::isAppleEaten() {
 	return (m_snake.body[0] == m_field.applePos);
 }
 
+bool Game::isNewAppleValid(Position newApplePositionCandidate) {
+	for (unsigned long iBody{ 0 }; iBody < m_snake.length; ++iBody) {
+		if (newApplePositionCandidate == m_snake.body[iBody]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+Position Game::generateNewApplePos() {
+	int nextApplePosHorizontal{ int(std::time(NULL)) % m_field.length };
+	int nextApplePosVertical{ int(std::time(NULL)) % m_field.width };
+	return std::make_pair(nextApplePosHorizontal, nextApplePosVertical);
+}
+
 void Game::renewApple() {
-	m_field.applePos = std::make_pair<int, int>(5, 5);
+	Position newApplePos{ generateNewApplePos() };
+	while (!isNewAppleValid(newApplePos)) {
+		newApplePos = generateNewApplePos();
+	}
+
+	m_field.applePos = newApplePos;
 }
 
 void Game::snakeEatsApple() {

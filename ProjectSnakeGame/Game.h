@@ -10,16 +10,18 @@ enum Direction {
 	Left = -2
 };
 
+typedef std::pair<int, int> Position;
+
 struct Field {
 	int width;
 	int length;
-	std::pair<int, int> applePos;
+	Position applePos;
 };
 
 struct Snake {
 	Direction headOrientation{ Up };
 	int length{2};
-	std::vector<std::pair<int, int>> body{ {6,10}, {7,10} };//body[0] is always the head!
+	std::vector<Position> body{ {6,10}, {7,10} };//body[0] is always the head!
 };
 
 class Game
@@ -44,6 +46,8 @@ public:
 	bool isAppleEaten();
 	void snakeEatsApple();
 	void renewApple();
+	Position generateNewApplePos();
+	bool isNewAppleValid(Position newApplePositionCandidate);
 	void gameOver();
 
 	Field getField() { return m_field; }
