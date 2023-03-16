@@ -72,6 +72,6 @@ void Game::snakeEatsApple() {
 }
 
 bool Game::isMoveValid(Direction nextMove) {
-	return (nextMove + m_snake.headOrientation != 0);
+	return nextMove && (nextMove + m_snake.headOrientation != 0);
 }
 

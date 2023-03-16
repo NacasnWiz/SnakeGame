@@ -10,7 +10,6 @@ const double NUM_SECONDS = 0.5;
 
 Direction receiveDirectionInput() {
 	//char input;
-	std::cout << "please type one char ";
 	//std::cin >> input;
 	char input = (int)( _getch() );
 
@@ -28,7 +27,6 @@ Direction receiveDirectionInput() {
 	case 'D':
 		return Right;
 	default:
-		std::cout << "Sorry, we only accept zqsd input.\n";
 		return Invalid;
 	}
 
@@ -51,16 +49,21 @@ bool isGameOver(Game& game) {
 void playGame(Game& game) {
 	//receive Input
 	Direction nextMove{};
+	bool isLastMoveValid{ true };
 
-	if (_kbhit())
+	if (_kbhit()) {
 		nextMove = receiveDirectionInput();
-	// do stuff depending on key_code
+	}
 	else {
 		nextMove = game.getSnake().headOrientation;
 	}
 
 	//move accordingly
 	if (game.isMoveValid(nextMove)) {
+		game.moveSnake(nextMove);
+	}
+	else {
+		nextMove = game.getSnake().headOrientation;
 		game.moveSnake(nextMove);
 	}
 
@@ -80,6 +83,10 @@ void playGame(Game& game) {
 	else {
 		clearScreen();
 		printGame(game);
+		std::cout << "please type one char ";
+		if (!isLastMoveValid) {
+			std::cout << " Sorry, we only accept zqsd input.\n";
+		}
 	}
 	
 }
