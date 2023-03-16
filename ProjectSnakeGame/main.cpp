@@ -3,10 +3,16 @@
 #include "user_interface.h"
 #include "Game.h"
 
+
+#include <conio.h>
+
+
+
 Direction receiveDirectionInput() {
-	char input;
+	//char input;
 	std::cout << "please type one char ";
-	std::cin >> input;
+	//std::cin >> input;
+	char input = (int)( _getch() );
 
 	switch (input) {
 	case 'z':
@@ -85,6 +91,8 @@ int main()
 	}
 
 	std::cout << "GameOver!";
+
+
 
 
 }
