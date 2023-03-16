@@ -92,7 +92,4 @@ int main()
 
 	std::cout << "GameOver!";
 
-
-
-
 }
