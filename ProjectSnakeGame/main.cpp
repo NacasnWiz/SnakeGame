@@ -3,9 +3,9 @@
 #include "user_interface.h"
 #include "Game.h"
 
-
 #include <conio.h>
 
+const double NUM_SECONDS = 0.5;
 
 
 Direction receiveDirectionInput() {
@@ -50,9 +50,13 @@ bool isGameOver(Game& game) {
 
 void playGame(Game& game) {
 	//receive Input
-	Direction nextMove{ receiveDirectionInput() };
-	while (!nextMove) {
+	Direction nextMove{};
+
+	if (_kbhit())
 		nextMove = receiveDirectionInput();
+	// do stuff depending on key_code
+	else {
+		nextMove = game.getSnake().headOrientation;
 	}
 
 	//move accordingly
@@ -86,9 +90,29 @@ int main()
 
 	startGame(current_game);
 
-	while (current_game.m_isOn) {
-		playGame(current_game);
+	double time_counter = 0;
+
+	clock_t this_time = clock();
+	clock_t last_time = this_time;
+
+	printf("Gran = %ld\n", (int) NUM_SECONDS * CLOCKS_PER_SEC);
+
+	while (current_game.m_isOn)
+	{
+		this_time = clock();
+
+		time_counter += (double)(this_time - last_time);
+
+		last_time = this_time;
+
+		if (time_counter > (double)(NUM_SECONDS * CLOCKS_PER_SEC))
+		{
+			time_counter -= (double)(NUM_SECONDS * CLOCKS_PER_SEC);
+			playGame(current_game);
+		}
+
 	}
+
 
 	std::cout << "GameOver!";
 
