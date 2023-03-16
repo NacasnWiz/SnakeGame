@@ -53,6 +53,9 @@ void playGame(Game& game) {
 
 	if (_kbhit()) {
 		nextMove = receiveDirectionInput();
+		if (!nextMove) {
+			isLastMoveValid = false;
+		}
 	}
 	else {
 		nextMove = game.getSnake().headOrientation;
@@ -83,10 +86,11 @@ void playGame(Game& game) {
 	else {
 		clearScreen();
 		printGame(game);
-		std::cout << "please type one char ";
 		if (!isLastMoveValid) {
-			std::cout << " Sorry, we only accept zqsd input.\n";
+			std::cout << "Sorry, we only accept zqsd input.\n";
 		}
+		std::cout << "please type one char ";
+
 	}
 	
 }
